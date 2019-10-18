@@ -4,7 +4,7 @@ Membuat Robot Line Follower menggunakan ARDUINO & PID, 4 Sensor dan 2 Motor.
 
 ## Siapkan Komponen
 <p align="center">
-  <img src="images/Komponen.jpgg" width="350" title="Komponen">
+  <img src="images/Komponen.jpg" width="350" title="Komponen">
 </p>
 
 ## Buat Mekanik Robot
