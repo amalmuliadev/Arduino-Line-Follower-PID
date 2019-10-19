@@ -22,15 +22,10 @@ int initial_motor_speed = 140; // kalibrasi kecepatan motor
 int ledPin1 = A3;
 int ledPin2 = A4;
 
-// PID Constants
-float Kp = 25;
-float Ki = 0;
-float Kd = 15;
-
-float error = 0, P = 0, I = 0, D = 0, PID_value = 0;
-float previous_error = 0, previous_I = 0;
-
 int flag = 0;
+
+
+float error = 0, PID_value = 100;
 
 void setup()
 {
@@ -57,6 +52,7 @@ void setup()
   Serial.println("Started !!");
   delay(1000);
 }
+
 void loop()
 {
   read_sensor_values();
@@ -131,7 +127,6 @@ void loop()
       }
     }
   } else {
-    kalkulasi_pid();
     motor_control();
   }
 }
@@ -176,25 +171,13 @@ void read_sensor_values()
     error = 103;
 }
 
-void kalkulasi_pid()
-{
-  P = error;
-  I = I + previous_I;
-  D = error - previous_error;
-
-  PID_value = (Kp * P) + (Ki * I) + (Kd * D);
-
-  previous_I = I;
-  previous_error = error;
-}
-
 void motor_control()
 {
   // Menghitung kecepatan motor efektif:
-  int kecepatan_motor_kiri = initial_motor_speed - PID_value;
-  int kecepatan_motor_kanan = initial_motor_speed + PID_value;
+  int kecepatan_motor_kiri = initial_motor_speed;
+  int kecepatan_motor_kanan = initial_motor_speed;
 
-  // Kecepatan motor tidak boleh melebihi nilai maksimal PWM
+  // Kecepatan motor tidak boleh melebihi nilai PWM maks
   kecepatan_motor_kiri = constrain(kecepatan_motor_kiri, 0, 255);
   kecepatan_motor_kanan = constrain(kecepatan_motor_kanan, 0, 255);
 
@@ -218,6 +201,7 @@ void maju()
   digitalWrite(motorInput3, LOW);
   digitalWrite(motorInput4, HIGH);
 }
+
 void mundur()
 {
   digitalWrite(motorInput1, HIGH);
@@ -225,6 +209,7 @@ void mundur()
   digitalWrite(motorInput3, HIGH);
   digitalWrite(motorInput4, LOW);
 }
+
 void belok_kanan()
 {
   digitalWrite(motorInput1, LOW);
@@ -232,6 +217,7 @@ void belok_kanan()
   digitalWrite(motorInput3, LOW);
   digitalWrite(motorInput4, LOW);
 }
+
 void belok_kiri()
 {
   digitalWrite(motorInput1, LOW);
@@ -239,18 +225,21 @@ void belok_kiri()
   digitalWrite(motorInput3, LOW);
   digitalWrite(motorInput4, HIGH);
 }
+
 void belok_kanan_tajam() {
   digitalWrite(motorInput1, LOW);
   digitalWrite(motorInput2, HIGH);
   digitalWrite(motorInput3, HIGH);
   digitalWrite(motorInput4, LOW);
 }
+
 void belok_kiri_tajam() {
   digitalWrite(motorInput1, HIGH);
   digitalWrite(motorInput2, LOW);
   digitalWrite(motorInput3, LOW);
   digitalWrite(motorInput4, HIGH);
 }
+
 void berhenti()
 {
   digitalWrite(motorInput1, LOW);
